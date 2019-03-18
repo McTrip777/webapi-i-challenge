@@ -17,6 +17,19 @@ server.get('/api/users', (req, res) => {
         res.status(500).json({ message: 'error reading user' });
       });
 })
+server.get('/api/users/:id', (req, res) => {
+    const { id } = req.params;
+if (req.body.id !== id){
+    res.status(400).send('This user can not be found')
+}else{
+    db.users
+    .findById(id)
+    .then(user => {res.status(200).json(user)})
+    .catch(error => {
+        res.status(500).json({ message: 'error reading user' });
+      });
+    }
+})
 
 server.post('/api/users', (req, res) => {
     const userInfo = req.body;
