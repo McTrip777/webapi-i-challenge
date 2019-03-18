@@ -10,22 +10,46 @@ server.get('/api/users', (req, res) => {
     .find()
     .then(user => {res.status(200).json(user)})
     .catch(error => {
-        res.status(500).json({ message: 'error creating user' });
+        res.status(500).json({ message: 'error reading user' });
       });
 })
 
-// server.post('/api/users', (req, res) => {
-//     const userInfo = req.body;
-//     db.users
-//     .add(userInfo)
-//     .then(user =>
-//         res.status(201).json(user)    
-//     )
-//     .catch(
-//         res.status(500).json({message: 'error'})
-//     )
-// })
+server.post('/api/users', (req, res) => {
+    const userInfo = req.body;
+    console.log('user information', userInfo);
+
+    db.users
+    .insert(userInfo)
+    .then(user =>
+        res.status(201).json(user)    
+    )
+    .catch(error => {
+        res.status(500).json({ message: 'error creating user' });
+    });
+});
+
+server.delete('/api/users/:id', (req, res) => {
+    const { id } = req.params;
+    console.log(id);
+    db.users
+    .remove(id)
+    .then(deleted => {
+        res.status(204).end();
+    })
+    .catch(error => {
+        res.status(500).json({ message: 'error deleting user' });
+    });
+})
+
+
+
+
+
+
+
+
+
 
 server.listen(5000, () => 
-    console.log('Server')
+    console.log('Server is running')
 );
